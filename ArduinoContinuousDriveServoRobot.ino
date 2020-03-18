@@ -1,42 +1,23 @@
 #include <Servo.h>
 
-#define STOP_POINT 93
-#define STOP_LOWER 83
-#define STOP_UPPER 104
+#include "counter.h"
+
+#define LEFT_PIN 9
+#define RIGHT_PIN 10
 
 Servo left;
 Servo right;
 
-int l = STOP_LOWER;
-int r = STOP_UPPER;
-bool direction = 1;
+Counter *c = new Counter();
 
 void setup() {
-  Serial.begin(9600);
-  left.attach(9);
-  right.attach(10);
+  left.attach(LEFT_PIN);
+  right.attach(RIGHT_PIN);
 }
 
 void loop() {
-  counter();
-  left.write(l);
-  right.write(r);
-  Serial.println(l);
+  c->count();
+  left.write(c->getLeft());
+  right.write(c->getRight());
   delay(500);
-}
-
-void counter() {
-  if (direction) {
-    l++;
-    r--;
-    if (l >= STOP_UPPER - 1) {
-      direction = 0;
-    }
-  } else {
-    l--;
-    r++;
-    if (l <= STOP_LOWER) {
-      direction = 1;
-    }
-  }
 }
